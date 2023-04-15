@@ -1,6 +1,7 @@
 package com.example.mobile_cw_2
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -217,5 +218,10 @@ class MealsByIngredients : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun backButtonClicked(view: View) {
+        val mainIntent = Intent(this,MainActivity::class.java)
+        startActivity(mainIntent)
     }
 }                       
