@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -29,6 +30,7 @@ class MealsByIngredients : AppCompatActivity() {
     var ingredientsList = mutableListOf<String?>()
     var measuresList = mutableListOf<String?>()
     private lateinit var saveMealsToDatabase:Button
+    lateinit var errorMessage1:TextView
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,8 @@ class MealsByIngredients : AppCompatActivity() {
         mealsDao = DatabaseSingleton.mealsDao
         saveMealsToDatabase = findViewById(R.id.saveMealsToDatabase)
         saveMealsToDatabase.isEnabled = false
+
+        errorMessage1 = findViewById(R.id.errorMessage1)
         //        retreving the variable state on orientation changes
         if (savedInstanceState != null) {
             val savedMeals = savedInstanceState.getString("allMeals")
@@ -47,6 +51,7 @@ class MealsByIngredients : AppCompatActivity() {
             measuresList = savedInstanceState.getStringArrayList("measuresList") ?: mutableListOf()
             saveMealsToDatabase.isEnabled = savedInstanceState.getBoolean("saveMealsToDatabaseIsEnabled")
             mealsListTextBox.text = savedInstanceState.getString("mealsListTextBox")
+            errorMessage1.text = savedInstanceState.getString("errorMessage1")
         }
     }
 
@@ -59,46 +64,68 @@ class MealsByIngredients : AppCompatActivity() {
         outState.putStringArrayList("measuresList", ArrayList(measuresList))
         outState.putBoolean("saveMealsToDatabaseIsEnabled",saveMealsToDatabase.isEnabled)
         outState.putString("mealsListTextBox",mealsListTextBox.text.toString())
+        outState.putString("errorMessage1",errorMessage1.text.toString())
     }
-
+    fun containsInt(input: String): Boolean {
+        val chars = input.toCharArray()
+        for (c in chars) {
+            if (c.isDigit()) {
+                return true
+            }
+        }
+        return false
+    }
     fun retrieveMealsButtonClicked(view: View) {
+        errorMessage1.text = ""
         allMeals.setLength(0)
         measuresList.clear()
         ingredientsList.clear()
         retrievedMealsList.clear()
         mealsListTextBox.text = ""
-        // collecting all the JSON string
-        var stb = StringBuilder()
-        val url_string = "https://www.themealdb.com/api/json/v1/1/filter.php?i="+ingredientTextBox.text.toString()
-        // creating a url object
-        val url = URL(url_string)
-        // casting to HTTP step 5
-        val con: HttpURLConnection = url.openConnection() as HttpURLConnection
-        runBlocking {
-            launch {
-                // run the code of the coroutine in a new thread
-                withContext(Dispatchers.IO) {
-                    var bf = BufferedReader(InputStreamReader(con.inputStream))
-                    var line: String? = bf.readLine()
-                    while (line != null) {
-                        stb.append(line + "\n")
-                        line = bf.readLine()
-                    }
-                    // this contains the full JSON returned by the Web Service
-                    val json = JSONObject(stb.toString())
-                    var jsonArray: JSONArray = json.getJSONArray("meals")
-                    for (i in 0..jsonArray.length() - 1) {
-                        val meal: JSONObject = jsonArray[i] as JSONObject
-                        val mealId = meal["idMeal"] as String
-                        retrieveDataFromMealId(mealId)
-                    }
-                    runOnUiThread {
-                        mealsListTextBox.setText(allMeals)
-                        saveMealsToDatabase.isEnabled = true
+        val userInputContainInt = containsInt(ingredientTextBox.text.toString())
+        if (userInputContainInt){
+            errorMessage1.text = "Input cannot contain Integer."
+        }else{
+            // collecting all the JSON string
+            var stb = StringBuilder()
+            val url_string = "https://www.themealdb.com/api/json/v1/1/filter.php?i="+ingredientTextBox.text.toString()
+            // creating a url object
+            val url = URL(url_string)
+            // casting to HTTP step 5
+            val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+            runBlocking {
+                launch {
+                    // run the code of the coroutine in a new thread
+                    withContext(Dispatchers.IO) {
+                        var bf = BufferedReader(InputStreamReader(con.inputStream))
+                        var line: String? = bf.readLine()
+                        while (line != null) {
+                            stb.append(line + "\n")
+                            line = bf.readLine()
+                        }
+                        try{
+                            // this contains the full JSON returned by the Web Service
+                            val json = JSONObject(stb.toString())
+                            var jsonArray: JSONArray = json.getJSONArray("meals")
+                            for (i in 0..jsonArray.length() - 1) {
+                                val meal: JSONObject = jsonArray[i] as JSONObject
+                                val mealId = meal["idMeal"] as String
+                                retrieveDataFromMealId(mealId)
+                            }
+                            runOnUiThread {
+                                mealsListTextBox.setText(allMeals)
+                                saveMealsToDatabase.isEnabled = true
+                            }
+                        } catch (e: JSONException) {
+                            allMeals.append("Not Found.Try Again")
+                            mealsListTextBox.setText(allMeals)
+                        }
+
                     }
                 }
             }
         }
+
     }
     fun retrieveDataFromMealId(mealId: String){
         var stb = StringBuilder()

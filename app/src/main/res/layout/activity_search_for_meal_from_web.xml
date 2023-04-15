@@ -65,4 +65,16 @@
             android:text="" />
     </ScrollView>
 
+    <TextView
+        android:id="@+id/errorMessage3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0303"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/searchFromWebButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchMealsFromWebTextBox" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,10 +32,10 @@
         android:text="Save Meals To Database"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.269"
+        app:layout_constraintHorizontal_bias="0.257"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ingredientTextBox"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintVertical_bias="0.078" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -60,10 +60,10 @@
         android:text="Retrieve Meals"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.402"
+        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toEndOf="@+id/saveMealsToDatabase"
         app:layout_constraintTop_toBottomOf="@+id/ingredientTextBox"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintVertical_bias="0.078" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -82,5 +82,17 @@
             android:layout_height="wrap_content"
             android:text="" />
     </ScrollView>
+    <TextView
+        android:id="@+id/errorMessage1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0303"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/saveMealsToDatabase"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientTextBox"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
