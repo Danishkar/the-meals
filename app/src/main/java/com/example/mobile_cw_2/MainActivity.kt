@@ -122,4 +122,14 @@ class MainActivity : AppCompatActivity() {
         val searchByIngredientIntent = Intent(this,MealsByIngredients::class.java)
         startActivity(searchByIngredientIntent)
     }
+
+    fun searchByMealsButtonClicked(view: View) {
+        val searchForMealsIntent = Intent(this,SearchForMeal::class.java)
+        startActivity(searchForMealsIntent)
+    }
+
+    fun searchForMealsFromWebButtonClicked(view: View) {
+        val searchForMealsFromWebIntent = Intent(this,SearchForMealFromWeb::class.java)
+        startActivity(searchForMealsFromWebIntent)
+    }
 }

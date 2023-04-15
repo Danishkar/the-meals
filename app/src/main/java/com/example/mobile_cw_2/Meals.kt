@@ -3,6 +3,7 @@ package com.example.mobile_cw_2
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "meals")
 data class Meals(
@@ -59,4 +60,4 @@ data class Meals(
 //    @ColumnInfo(name = "imageSource") val imageSource: String?,
 //    @ColumnInfo(name = "creativeCommonsConfirmed") val creativeCommonsConfirmed: String?,
 //    @ColumnInfo(name = "dateModified") val dateModified:String?
-)
+): Serializable

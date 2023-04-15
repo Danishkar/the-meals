@@ -16,6 +16,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.io.Serializable
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -37,6 +38,27 @@ class MealsByIngredients : AppCompatActivity() {
         mealsDao = DatabaseSingleton.mealsDao
         saveMealsToDatabase = findViewById(R.id.saveMealsToDatabase)
         saveMealsToDatabase.isEnabled = false
+        //        retreving the variable state on orientation changes
+        if (savedInstanceState != null) {
+            val savedMeals = savedInstanceState.getString("allMeals")
+            allMeals = StringBuilder(savedMeals)
+            retrievedMealsList = savedInstanceState.getSerializable("retrievedMealsList") as MutableList<Meals>
+            ingredientsList = savedInstanceState.getStringArrayList("ingredientsList") ?: mutableListOf()
+            measuresList = savedInstanceState.getStringArrayList("measuresList") ?: mutableListOf()
+            saveMealsToDatabase.isEnabled = savedInstanceState.getBoolean("saveMealsToDatabaseIsEnabled")
+            mealsListTextBox.text = savedInstanceState.getString("mealsListTextBox")
+        }
+    }
+
+    //        Storing the variable state on orientation changes
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("allMeals", allMeals.toString())
+        outState.putSerializable("retrievedMealsList", retrievedMealsList as Serializable)
+        outState.putStringArrayList("ingredientsList", ArrayList(ingredientsList))
+        outState.putStringArrayList("measuresList", ArrayList(measuresList))
+        outState.putBoolean("saveMealsToDatabaseIsEnabled",saveMealsToDatabase.isEnabled)
+        outState.putString("mealsListTextBox",mealsListTextBox.text.toString())
     }
 
     fun retrieveMealsButtonClicked(view: View) {
@@ -44,6 +66,7 @@ class MealsByIngredients : AppCompatActivity() {
         measuresList.clear()
         ingredientsList.clear()
         retrievedMealsList.clear()
+        mealsListTextBox.text = ""
         // collecting all the JSON string
         var stb = StringBuilder()
         val url_string = "https://www.themealdb.com/api/json/v1/1/filter.php?i="+ingredientTextBox.text.toString()
@@ -109,8 +132,14 @@ class MealsByIngredients : AppCompatActivity() {
                         val tags = if (meal.isNull("strTags")) null else meal.getString("strTags")
                         val youtube = meal["strYoutube"] as String?
                         val mealThumb = meal["strMealThumb"] as String?
+                        val slicedInstruction : String
+                        if(instruction != null){
+                            slicedInstruction = instruction.substring(0,30)+"...."
+                        }else{
+                            slicedInstruction = "null"
+                        }
                         allMeals.append("\"Meal\":\"$mealName\",\n\"DrinkAlternate\":\"$drinkAlternative\",\n\"Category\":\"$category\"" +
-                                ",\n\"Area\":\"$area\",\n\"Instructions\":\"$instruction\",\n\"Tags\":\"$tags\",\n\"Youtube\":\"$youtube \"")
+                                ",\n\"Area\":\"$area\",\n\"Instructions\":\"$slicedInstruction\",\n\"Tags\":\"$tags\",\n\"Youtube\":\"$youtube \"")
                         for(y in 0 .. 19){
                             if (meal["strIngredient"+(y+1)] != ""){
                                 val num = y+1

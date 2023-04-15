@@ -6,36 +6,34 @@
     android:layout_height="match_parent"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    tools:context=".MealsByIngredients">
+    tools:context=".SearchForMealFromWeb">
 
     <EditText
-        android:id="@+id/ingredientTextBox"
+        android:id="@+id/searchMealsFromWebTextBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:minHeight="48dp"
-        android:hint="Search for meals by Ingredients"
+        android:hint="Search for meals from web"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.042"
-        tools:ignore="VisualLintTextFieldSize" />
+        app:layout_constraintVertical_bias="0.042" />
 
     <Button
-        android:id="@+id/saveMealsToDatabase"
+        android:id="@+id/searchFromWebButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:width="140dp"
-        android:text="Save Meals To Database"
-        android:onClick="saveMealsToDatabaseButtonClicked"
+        android:layout_marginTop="30dp"
+        android:text="Search"
+        android:onClick="searchFromWebButtonClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ingredientTextBox"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintTop_toBottomOf="@+id/searchMealsFromWebTextBox"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -51,20 +49,6 @@
         app:layout_constraintVertical_bias="0.952"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
-    <Button
-        android:id="@+id/retrieveMeals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:width="140dp"
-        android:onClick="retrieveMealsButtonClicked"
-        android:text="Retrieve Meals"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.568"
-        app:layout_constraintStart_toEndOf="@+id/saveMealsToDatabase"
-        app:layout_constraintTop_toBottomOf="@+id/ingredientTextBox"
-        app:layout_constraintVertical_bias="0.05" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="500dp"
@@ -72,10 +56,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveMealsToDatabase">
+        app:layout_constraintTop_toBottomOf="@+id/searchFromWebButton">
 
         <TextView
-            android:id="@+id/mealsListTextBox"
+            android:id="@+id/mealsFromWebTextBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="" />

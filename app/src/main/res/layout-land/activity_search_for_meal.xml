@@ -6,36 +6,34 @@
     android:layout_height="match_parent"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    tools:context=".MealsByIngredients">
+    tools:context=".SearchForMeal">
 
     <EditText
-        android:id="@+id/ingredientTextBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:minHeight="48dp"
-        android:hint="Search for meals by Ingredients"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.042"
-        tools:ignore="VisualLintTextFieldSize" />
-
-    <Button
-        android:id="@+id/saveMealsToDatabase"
+        android:id="@+id/searchMealsTextBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:width="140dp"
-        android:text="Save Meals To Database"
-        android:onClick="saveMealsToDatabaseButtonClicked"
+        android:ems="10"
+        android:hint="Search for meals"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintHorizontal_bias="0.309"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ingredientTextBox"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.044" />
+
+    <Button
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="searchButtonClicked"
+        android:text="Search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.381"
+        app:layout_constraintStart_toEndOf="@+id/searchMealsTextBox"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.044" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -51,31 +49,19 @@
         app:layout_constraintVertical_bias="0.952"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
-    <Button
-        android:id="@+id/retrieveMeals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:width="140dp"
-        android:onClick="retrieveMealsButtonClicked"
-        android:text="Retrieve Meals"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.568"
-        app:layout_constraintStart_toEndOf="@+id/saveMealsToDatabase"
-        app:layout_constraintTop_toBottomOf="@+id/ingredientTextBox"
-        app:layout_constraintVertical_bias="0.05" />
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="220dp"
+        android:paddingBottom="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveMealsToDatabase">
+        app:layout_constraintTop_toBottomOf="@+id/search"
+        app:layout_constraintVertical_bias="0.148">
 
         <TextView
-            android:id="@+id/mealsListTextBox"
+            android:id="@+id/mealsFromDbTextBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="" />
