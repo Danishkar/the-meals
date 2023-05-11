@@ -2,19 +2,25 @@ package com.example.mobile_cw_2
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
+import java.io.InputStream
+import java.net.URL
 
 class SearchForMeal : AppCompatActivity() {
     private lateinit var mealsDao: MealsDao
     lateinit var searchMealsTextBox:EditText
-    lateinit var mealsFromDbTextBox:TextView
-    var foundMeals = java.lang.StringBuilder()
+    lateinit var linearLayout1: LinearLayout
+    var foundIngredientAndMeasures = java.lang.StringBuilder()
     lateinit var errorMessage2:TextView
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,13 +28,13 @@ class SearchForMeal : AppCompatActivity() {
         setContentView(R.layout.activity_search_for_meal)
         mealsDao = DatabaseSingleton.mealsDao
         searchMealsTextBox = findViewById(R.id.searchMealsTextBox)
-        mealsFromDbTextBox = findViewById(R.id.mealsFromDbTextBox)
+//        mealsFromDbTextBox = findViewById(R.id.mealsFromDbTextBox)
+        linearLayout1 = findViewById(R.id.linearLayout1)
         errorMessage2 = findViewById(R.id.errorMessage2)
         //        retreving the variable state on orientation changes
         if (savedInstanceState != null) {
-            val foundMeal = savedInstanceState.getString("foundMeals")
-            foundMeals = StringBuilder(foundMeal)
-            mealsFromDbTextBox.text = savedInstanceState.getString("mealsFromDbTextBox")
+            val foundIngredientAndMeasure = savedInstanceState.getString("foundIngredientAndMeasures")
+            foundIngredientAndMeasures = StringBuilder(foundIngredientAndMeasure)
             errorMessage2.text = savedInstanceState.getString("errorMessage2")
         }
     }
@@ -36,8 +42,7 @@ class SearchForMeal : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("foundMeals", foundMeals.toString())
-        outState.putString("mealsFromDbTextBox",mealsFromDbTextBox.text.toString())
+        outState.putString("foundIngredientAndMeasures", foundIngredientAndMeasures.toString())
         outState.putString("errorMessage2",errorMessage2.text.toString())
     }
 
@@ -50,10 +55,10 @@ class SearchForMeal : AppCompatActivity() {
         }
         return false
     }
+    @SuppressLint("MissingInflatedId", "SetTextI18n")
     fun searchButtonClicked(view: View) {
         errorMessage2.text = ""
-        foundMeals.setLength(0)
-        mealsFromDbTextBox.text = ""
+        foundIngredientAndMeasures.setLength(0)
         val searchQuery = searchMealsTextBox.text.toString()
         val userInputContainInt = containsInt(searchQuery)
         if (userInputContainInt){
@@ -80,65 +85,69 @@ class SearchForMeal : AppCompatActivity() {
                                 val tags = meal.tags
                                 val youtube = meal.youtube
                                 val mealThumb = meal.mealThumb
-                                foundMeals.append(
-                                    "\"Meal\":\"$mealName\",\n\"DrinkAlternate\":\"$drinkAlternative\",\n\"Category\":\"$category\"" +
-                                            ",\n\"Area\":\"$area\",\n\"Instructions\":\"$slicedInstruction\",\n\"Tags\":\"$tags\",\n\"Youtube\":\"$youtube \""
-                                )
-                                foundMeals.append(",\n\"Ingredient1\":\"${meal.ingredient1}\"")
-                                foundMeals.append(",\n\"Ingredient2\":\"${meal.ingredient2}\"")
-                                foundMeals.append(",\n\"Ingredient3\":\"${meal.ingredient3}\"")
-                                foundMeals.append(",\n\"Ingredient4\":\"${meal.ingredient4}\"")
-                                foundMeals.append(",\n\"Ingredient5\":\"${meal.ingredient5}\"")
-                                foundMeals.append(",\n\"Ingredient6\":\"${meal.ingredient6}\"")
-                                foundMeals.append(",\n\"Ingredient7\":\"${meal.ingredient7}\"")
-                                foundMeals.append(",\n\"Ingredient8\":\"${meal.ingredient8}\"")
-                                foundMeals.append(",\n\"Ingredient9\":\"${meal.ingredient9}\"")
-                                foundMeals.append(",\n\"Ingredient10\":\"${meal.ingredient10}\"")
-                                foundMeals.append(",\n\"Ingredient11\":\"${meal.ingredient11}\"")
-                                foundMeals.append(",\n\"Ingredient12\":\"${meal.ingredient12}\"")
-                                foundMeals.append(",\n\"Ingredient13\":\"${meal.ingredient13}\"")
-                                foundMeals.append(",\n\"Ingredient14\":\"${meal.ingredient14}\"")
-                                foundMeals.append(",\n\"Ingredient15\":\"${meal.ingredient15}\"")
-                                foundMeals.append(",\n\"Ingredient16\":\"${meal.ingredient16}\"")
-                                foundMeals.append(",\n\"Ingredient17\":\"${meal.ingredient17}\"")
-                                foundMeals.append(",\n\"Ingredient18\":\"${meal.ingredient18}\"")
-                                foundMeals.append(",\n\"Ingredient19\":\"${meal.ingredient19}\"")
-                                foundMeals.append(",\n\"Ingredient20\":\"${meal.ingredient20}\"")
-                                foundMeals.append(",\n\"Measure1\":\"${meal.measure1}\"")
-                                foundMeals.append(",\n\"Measure2\":\"${meal.measure2}\"")
-                                foundMeals.append(",\n\"Measure3\":\"${meal.measure3}\"")
-                                foundMeals.append(",\n\"Measure4\":\"${meal.measure4}\"")
-                                foundMeals.append(",\n\"Measure5\":\"${meal.measure5}\"")
-                                foundMeals.append(",\n\"Measure6\":\"${meal.measure6}\"")
-                                foundMeals.append(",\n\"Measure7\":\"${meal.measure7}\"")
-                                foundMeals.append(",\n\"Measure8\":\"${meal.measure8}\"")
-                                foundMeals.append(",\n\"Measure9\":\"${meal.measure9}\"")
-                                foundMeals.append(",\n\"Measure10\":\"${meal.measure10}\"")
-                                foundMeals.append(",\n\"Measure11\":\"${meal.measure11}\"")
-                                foundMeals.append(",\n\"Measure12\":\"${meal.measure12}\"")
-                                foundMeals.append(",\n\"Measure13\":\"${meal.measure13}\"")
-                                foundMeals.append(",\n\"Measure14\":\"${meal.measure14}\"")
-                                foundMeals.append(",\n\"Measure15\":\"${meal.measure15}\"")
-                                foundMeals.append(",\n\"Measure16\":\"${meal.measure16}\"")
-                                foundMeals.append(",\n\"Measure17\":\"${meal.measure17}\"")
-                                foundMeals.append(",\n\"Measure18\":\"${meal.measure18}\"")
-                                foundMeals.append(",\n\"Measure19\":\"${meal.measure19}\"")
-                                foundMeals.append(",\n\"Measure20\":\"${meal.measure20}\"")
-                                foundMeals.append("\n\n")
+
+
+                                val layoutInflater = LayoutInflater.from(this@SearchForMeal)
+                                val rootView = layoutInflater.inflate(R.layout.list_item, null)
+
+                                val myImageView = rootView.findViewById<ImageView>(R.id.list_item_image)
+                                val drawable: Drawable? = loadImageFromWebOperations(mealThumb)
+                                myImageView.setImageDrawable(drawable)
+
+                                val myMealNameView = rootView.findViewById<TextView>(R.id.list_item_meal_name)
+                                myMealNameView.setText(mealName)
+
+                                val myMealOtherData = rootView.findViewById<TextView>(R.id.list_item_meal_other_data)
+                                myMealOtherData.setText("Drink Alternate : $drinkAlternative,\nCategory : $category" +
+                                        ",\nArea : $area,\nInstructions : $slicedInstruction,\nTags : $tags,\nYoutube : $youtube")
+
+                                val myMealIngredientAndMeasures = rootView.findViewById<TextView>(R.id.list_item_meal_ingredient_measures)
+                                foundIngredientAndMeasures.append("\nIngredient1 : ${meal.ingredient1}"+", Measure1 : ${meal.measure1}")
+                                foundIngredientAndMeasures.append("\nIngredient2 : ${meal.ingredient2}"+", Measure2 : ${meal.measure2}")
+                                foundIngredientAndMeasures.append("\nIngredient3 : ${meal.ingredient3}"+", Measure3 : ${meal.measure3}")
+                                foundIngredientAndMeasures.append("\nIngredient4 : ${meal.ingredient4}"+", Measure4 : ${meal.measure4}")
+                                foundIngredientAndMeasures.append("\nIngredient5 : ${meal.ingredient5}"+", Measure5 : ${meal.measure5}")
+                                foundIngredientAndMeasures.append("\nIngredient6 : ${meal.ingredient6}"+", Measure6 : ${meal.measure6}")
+                                foundIngredientAndMeasures.append("\nIngredient7 : ${meal.ingredient7}"+", Measure7 : ${meal.measure7}")
+                                foundIngredientAndMeasures.append("\nIngredient8 : ${meal.ingredient8}"+", Measure8 : ${meal.measure8}")
+                                foundIngredientAndMeasures.append("\nIngredient9 : ${meal.ingredient9}"+", Measure9 : ${meal.measure9}")
+                                foundIngredientAndMeasures.append("\nIngredient10 : ${meal.ingredient10}"+", Measure10 : ${meal.measure10}")
+                                foundIngredientAndMeasures.append("\nIngredient11 : ${meal.ingredient11}"+", Measure11 : ${meal.measure11}")
+                                foundIngredientAndMeasures.append("\nIngredient12 : ${meal.ingredient12}"+", Measure12 : ${meal.measure12}")
+                                foundIngredientAndMeasures.append("\nIngredient13 : ${meal.ingredient13}"+", Measure13 : ${meal.measure13}")
+                                foundIngredientAndMeasures.append("\nIngredient14 : ${meal.ingredient14}"+", Measure14 : ${meal.measure14}")
+                                foundIngredientAndMeasures.append("\nIngredient15 : ${meal.ingredient15}"+", Measure15 : ${meal.measure15}")
+                                foundIngredientAndMeasures.append("\nIngredient16 : ${meal.ingredient16}"+", Measure16 : ${meal.measure16}")
+                                foundIngredientAndMeasures.append("\nIngredient17 : ${meal.ingredient17}"+", Measure17 : ${meal.measure17}")
+                                foundIngredientAndMeasures.append("\nIngredient18 : ${meal.ingredient18}"+", Measure18 : ${meal.measure18}")
+                                foundIngredientAndMeasures.append("\nIngredient19 : ${meal.ingredient19}"+", Measure19 : ${meal.measure19}")
+                                foundIngredientAndMeasures.append("\nIngredient20 : ${meal.ingredient20}"+", Measure20 : ${meal.measure20}")
+                                myMealIngredientAndMeasures.setText(foundIngredientAndMeasures)
+                                linearLayout1.addView(rootView)
+                                foundIngredientAndMeasures.setLength(0)
+
                                 Log.d("Printing", meal.mealName)
                             }
                         }else{
-                            foundMeals.append("Not Found.Try Again")
+//                            foundMeals.append("Not Found.Try Again")
                         }
 
-                    }
-                    runOnUiThread {
-                        mealsFromDbTextBox.setText(foundMeals)
                     }
                 }
             }
         }
     }
+
+    private fun loadImageFromWebOperations(url: String?): Drawable? {
+        return try {
+            val inputStream: InputStream = URL(url).content as InputStream
+            Drawable.createFromStream(inputStream, "src name")
+        } catch (e: Exception) {
+            println("Exc=$e")
+            null
+        }
+    }
+
 
     fun backButtonClicked(view: View) {
         val mainIntent = Intent(this,MainActivity::class.java)
