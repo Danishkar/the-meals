@@ -56,8 +56,4 @@ data class Meals(
     @ColumnInfo(name = "measure18") val measure18: String?,
     @ColumnInfo(name = "measure19") val measure19: String?,
     @ColumnInfo(name = "measure20") val measure20: String?,
-//    @ColumnInfo(name = "source") val source: String?,
-//    @ColumnInfo(name = "imageSource") val imageSource: String?,
-//    @ColumnInfo(name = "creativeCommonsConfirmed") val creativeCommonsConfirmed: String?,
-//    @ColumnInfo(name = "dateModified") val dateModified:String?
 ): Serializable

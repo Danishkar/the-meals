@@ -60,13 +60,14 @@
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search"
-        app:layout_constraintVertical_bias="0.148">
+        app:layout_constraintVertical_bias="0.148"
+        tools:ignore="SpeakableTextPresentCheck">
 
-        <TextView
-            android:id="@+id/mealsFromDbTextBox"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:orientation="vertical" />
     </ScrollView>
 
     <TextView

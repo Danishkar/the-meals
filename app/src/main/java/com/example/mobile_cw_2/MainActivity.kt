@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.room.Room
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         DatabaseSingleton.mealsDao = mealsDao
     }
 
+//    hardcoding the 4 meals data in the meals txt file.
     fun addMealsButtonClicked(view: View) {
         val meal1 = Meals(null, "Sweet and Sour Pork", null, "Pork", "Chinese",
             "Preparation\r\n1. Crack the egg into a bowl. Separate the egg white and yolk." +
@@ -103,31 +105,24 @@ class MainActivity : AppCompatActivity() {
         )
         GlobalScope.launch(Dispatchers.IO) {
             mealsDao.insertMeal(meal1,meal2,meal3,meal4)
-
-            val mealsList: List<Meals> = mealsDao.getAllMeals()
-            val mealsNameList:List<String> = mealsDao.getAllMealNames()
-            for(items in mealsNameList){
-                Log.d("MyListNames", items)
-            }
-            for(item in mealsList){
-                val myString: String? = item.mealName+" ingredient - " + item.ingredient1
-                if(myString != null){
-                    Log.d("MyNames",myString)
-                }
-            }
         }
+        Toast.makeText(this, "Successfully added the 4 meals", Toast.LENGTH_SHORT).show()
+
     }
 
+//    function when the search for meals by ingredients button is clicked.
     fun searchByIngredientButtonClicked(view: View) {
         val searchByIngredientIntent = Intent(this,MealsByIngredients::class.java)
         startActivity(searchByIngredientIntent)
     }
 
+//    function when the search for meals button is cli
     fun searchByMealsButtonClicked(view: View) {
         val searchForMealsIntent = Intent(this,SearchForMeal::class.java)
         startActivity(searchForMealsIntent)
     }
 
+//    function when the search for meals from web button is cli
     fun searchForMealsFromWebButtonClicked(view: View) {
         val searchForMealsFromWebIntent = Intent(this,SearchForMealFromWeb::class.java)
         startActivity(searchForMealsFromWebIntent)

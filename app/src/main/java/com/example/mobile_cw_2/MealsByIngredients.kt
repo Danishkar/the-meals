@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -43,7 +44,7 @@ class MealsByIngredients : AppCompatActivity() {
         saveMealsToDatabase.isEnabled = false
 
         errorMessage1 = findViewById(R.id.errorMessage1)
-        //        retreving the variable state on orientation changes
+//        retreving the variable state on orientation changes
         if (savedInstanceState != null) {
             val savedMeals = savedInstanceState.getString("allMeals")
             allMeals = StringBuilder(savedMeals)
@@ -56,7 +57,7 @@ class MealsByIngredients : AppCompatActivity() {
         }
     }
 
-    //        Storing the variable state on orientation changes
+//        Storing the variable state on orientation changes
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("allMeals", allMeals.toString())
@@ -67,6 +68,8 @@ class MealsByIngredients : AppCompatActivity() {
         outState.putString("mealsListTextBox",mealsListTextBox.text.toString())
         outState.putString("errorMessage1",errorMessage1.text.toString())
     }
+
+//    function to check if a string contains any integer.
     fun containsInt(input: String): Boolean {
         val chars = input.toCharArray()
         for (c in chars) {
@@ -76,6 +79,8 @@ class MealsByIngredients : AppCompatActivity() {
         }
         return false
     }
+
+//    function when the retrieve meals button is clicked.
     fun retrieveMealsButtonClicked(view: View) {
         errorMessage1.text = ""
         allMeals.setLength(0)
@@ -84,7 +89,10 @@ class MealsByIngredients : AppCompatActivity() {
         retrievedMealsList.clear()
         mealsListTextBox.text = ""
         val userInputContainInt = containsInt(ingredientTextBox.text.toString())
-        if (userInputContainInt){
+        if(ingredientTextBox.text.toString() == ""){
+            errorMessage1.text = "Input cannot be empty"
+        }
+        else if (userInputContainInt){
             errorMessage1.text = "Input cannot contain Integer."
         }else{
             // collecting all the JSON string
@@ -116,6 +124,7 @@ class MealsByIngredients : AppCompatActivity() {
                             runOnUiThread {
                                 mealsListTextBox.setText(allMeals)
                                 saveMealsToDatabase.isEnabled = true
+                                ingredientTextBox.setText("")
                             }
                         } catch (e: JSONException) {
                             allMeals.append("Not Found.Try Again")
@@ -128,6 +137,8 @@ class MealsByIngredients : AppCompatActivity() {
         }
 
     }
+
+//    function to retrieve all the meals details from the meals Id passed as an parameter.
     fun retrieveDataFromMealId(mealId: String){
         var stb = StringBuilder()
         val url_string = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=$mealId"
@@ -186,7 +197,6 @@ class MealsByIngredients : AppCompatActivity() {
                             measuresList.add(if (meal.isNull("strMeasure"+(y+1))) null else meal.getString("strMeasure"+(y+1)))
                         }
                         allMeals.append("\n\n")
-//                        Log.d("MyNames", ingredientsList[i].toString())
                         retrievedMealsList.add(Meals(mealId, mealName,drinkAlternative,category,area,instruction,
                         mealThumb,tags,youtube,ingredientsList[0],ingredientsList[1],ingredientsList[2],ingredientsList[3]
                         ,ingredientsList[4],ingredientsList[5],ingredientsList[6],ingredientsList[7],ingredientsList[8],ingredientsList[9]
@@ -202,6 +212,8 @@ class MealsByIngredients : AppCompatActivity() {
             }
         }
     }
+
+//    function to save all the meals to database retrieved from the users choice of ingredients.
     fun saveMealsToDatabaseButtonClicked(view: View) {
         runBlocking {
             launch {
@@ -213,15 +225,19 @@ class MealsByIngredients : AppCompatActivity() {
                     }
                     runOnUiThread {
                         saveMealsToDatabase.isEnabled = false
+                        ingredientTextBox.setText("")
+                        mealsListTextBox.setText("")
+                        Toast.makeText(this@MealsByIngredients, "Successfully added all the meals", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
-
     }
 
+//    function the back button is clicked
     fun backButtonClicked(view: View) {
         val mainIntent = Intent(this,MainActivity::class.java)
         startActivity(mainIntent)
+        finish()
     }
 }                       

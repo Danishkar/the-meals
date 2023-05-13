@@ -16,7 +16,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.io.Serializable
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -32,6 +31,7 @@ class SearchForMealFromWeb : AppCompatActivity() {
         searchMealsFromWebTextBox = findViewById(R.id.searchMealsFromWebTextBox)
         mealsFromWebTextBox = findViewById(R.id.mealsFromWebTextBox)
         errorMessage3 = findViewById(R.id.errorMessage3)
+//        retreving the variable state on orientation changes
         if (savedInstanceState != null) {
             val savedMeals = savedInstanceState.getString("nameFoundMeals")
             nameFoundMeals = StringBuilder(savedMeals)
@@ -39,6 +39,8 @@ class SearchForMealFromWeb : AppCompatActivity() {
             errorMessage3.text = savedInstanceState.getString("errorMessage3")
         }
     }
+
+//        Storing the variable state on orientation changes
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("nameFoundMeals", nameFoundMeals.toString())
@@ -46,7 +48,7 @@ class SearchForMealFromWeb : AppCompatActivity() {
         outState.putString("errorMessage3",errorMessage3.text.toString())
     }
 
-
+//    function to check if a string contains any integer.
     fun containsInt(input: String): Boolean {
         val chars = input.toCharArray()
         for (c in chars) {
@@ -56,13 +58,18 @@ class SearchForMealFromWeb : AppCompatActivity() {
         }
         return false
     }
+
+//    function when the search for meals from web button is clicked.
     fun searchFromWebButtonClicked(view: View) {
         errorMessage3.text = ""
         nameFoundMeals.setLength(0)
         mealsFromWebTextBox.text = ""
         var stb = StringBuilder()
         val userInputContainInt = containsInt(searchMealsFromWebTextBox.text.toString())
-        if (userInputContainInt){
+        if(searchMealsFromWebTextBox.text.toString() == ""){
+            errorMessage3.text = "Input cannot be empty"
+        }
+        else if (userInputContainInt){
             errorMessage3.text = "Input cannot contain Integer."
         }else{
             val url_string = "https://www.themealdb.com/api/json/v1/1/search.php?s="+searchMealsFromWebTextBox.text.toString()
@@ -134,9 +141,11 @@ class SearchForMealFromWeb : AppCompatActivity() {
 
     }
 
+//    function the back button is clicked
     fun backButtonClicked(view: View) {
         val mainIntent = Intent(this,MainActivity::class.java)
         startActivity(mainIntent)
+        finish()
     }
 
 }
