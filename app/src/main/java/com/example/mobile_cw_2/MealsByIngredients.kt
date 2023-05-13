@@ -82,6 +82,7 @@ class MealsByIngredients : AppCompatActivity() {
 
 //    function when the retrieve meals button is clicked.
     fun retrieveMealsButtonClicked(view: View) {
+        saveMealsToDatabase.isEnabled = false
         errorMessage1.text = ""
         allMeals.setLength(0)
         measuresList.clear()
