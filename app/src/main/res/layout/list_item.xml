@@ -37,7 +37,7 @@
 
     <TextView
         android:id="@+id/list_item_meal_other_data"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#333333"
         android:textSize="16sp"
